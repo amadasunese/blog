@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1 class="my-4">Home</h1>
+{% for post in posts.items %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">By {{ post.author.username }} on {{ post.date_posted.strftime('%Y-%m-%d') }}</h6>
+            <p class="card-text">{{ post.content[:150] }}...</p>
+            <a href="{{ url_for('main.post', post_id=post.id) }}" class="card-link">Read More</a>
+        </div>
+    </div>
+{% endfor %}
+<div class="pagination justify-content-center">
+    {% if posts.has_prev %}
+        <a class="page-link" href="{{ url_for('main.home', page=posts.prev_num) }}">&laquo;</a>
+    {% endif %}
+    {% for page_num in posts.iter_pages() %}
+        {% if page_num %}
+            {% if page_num == posts.page %}
+                <span class="page-link active">{{ page_num }}</span>
+            {% else %}
+                <a class="page-link" href="{{ url_for('main.home', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    {% if posts.has_next %}
+        <a class="page-link" href="{{ url_for('main.home', page=posts.next_num) }}">&raquo;</a>
+    {% endif %}
+</div>
+{% endblock %}

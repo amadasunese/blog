@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url_for('main.home') }}">Flask Blog</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.new_post') }}">Create Post</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.manage_ads') }}">Insert Ads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.ads') }}">View Ads</a>
+            </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.categories') }}">Manage Categories</a>
+                </li>
+           
+           
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.account') }}">Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.register') }}">Register</a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.about') }}">About</a>
+            </li>
+        </ul>
+    </div>
+</nav>

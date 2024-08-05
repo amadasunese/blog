@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Manage Advertisements{% endblock %}
+{% block content %}
+<h2 class="my-4">Manage Advertisements</h2>
+
+
+<!-- Display Existing Ads -->
+<h3 class="my-4">Current Ads</h3>
+{% for ad in ads %}
+<div class="card mb-3">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='ads/' + (ad.image_file if ad.image_file else 'ad_placeholder.jpg')) }}" class="card-img" alt="Ad Image">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Ad ID: {{ ad.id }}</h5>
+                <p class="card-text">Code: {{ ad.ad_code }}</p>
+                <p class="card-text">Active: {{ 'Yes' if ad.is_active else 'No' }}</p>
+                <p class="card-text">Embed Link: <a href="{{ ad.embed_link }}" target="_blank">{{ ad.embed_link }}</a></p>
+                <p class="card-text">Views: {{ ad.views }}</p>
+                <p class="card-text">Clicks: {{ ad.clicks }}</p>
+                <!-- Update Button -->
+                <form method="POST" action="{{ url_for('main.manage_ads') }}" style="display: inline;">
+                    <input type="hidden" name="ad_id" value="{{ ad.id }}">
+                    <button type="submit" class="btn btn-info">Update</button>
+                </form>
+                <!-- Delete Button -->
+                <form method="POST" action="{{ url_for('main.delete_advertisement', ad_id=ad.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+{% endfor %}
+{% endblock %}

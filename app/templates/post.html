@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block meta %}
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:image" content="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg'), _external=True) }}">
+<meta property="og:description" content="{{ post.content[:200] }}">
+{% endblock %}
+{% block content %}
+<article class="mt-4">
+    <h2>{{ post.title }}</h2>
+    <p class="text-muted">By {{ post.author.username }} on {{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+    
+    <!-- Featured Image with Default Placeholder -->
+    <img src="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg')) }}" 
+         class="featured-img float-left mr-3 mb-3" 
+         alt="Featured Image">
+    
+    <!-- Post Content -->
+    <div class="col-md-12">
+        <div class="post-content">
+            {{ post.content|safe }}
+        </div>
+    </div>
+
+    <!-- Social Media Sharing Buttons -->
+    <div class="social-share mt-4">
+        <p>Share this post:</p>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="btn btn-primary">
+            <i class="fab fa-facebook-f"></i> Facebook
+        </a>
+        <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}" target="_blank" class="btn btn-info">
+            <i class="fab fa-twitter"></i> Twitter
+        </a>
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url }}&title={{ post.title }}" target="_blank" class="btn btn-primary">
+            <i class="fab fa-linkedin-in"></i> LinkedIn
+        </a>
+        <a href="mailto:?subject={{ post.title }}&body=Check out this article: {{ request.url }}" class="btn btn-secondary">
+            <i class="fas fa-envelope"></i> Email
+        </a>
+    </div>
+    
+    <!-- Edit and Delete Buttons for Author -->
+    {% if post.author == current_user %}
+    <hr>
+    <a href="{{ url_for('main.update_post', post_id=post.id) }}" class="btn btn-secondary">Edit</a>
+    <form action="{{ url_for('main.delete_post', post_id=post.id) }}" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+    {% endif %}
+</article>
+{% endblock %}

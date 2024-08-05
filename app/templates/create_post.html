@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}{{ legend }}{% endblock %}
+{% block content %}
+<h2 class="my-4">{{ legend }}</h2>
+<div class="row">
+    <!-- Left Column for Title and Content -->
+    <div class="col-md-8">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <!-- Title Field -->
+            <div class="form-group">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-control") }}
+                {% for error in form.title.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Content Field -->
+            <div class="form-group">
+                {{ form.content.label(class="form-label") }}
+                {{ form.content(class="form-control", rows=5) }}
+                {% for error in form.content.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+            </div>
+    </div>
+
+    <!-- Right Column for Image and Category -->
+    <div class="col-md-4">
+        <!-- Image Upload Field -->
+        <div class="form-group">
+            {{ form.image.label(class="form-label") }}
+            {{ form.image(class="form-control-file") }}
+            <div class="mt-2">
+                <img id="image-preview" alt="Image Preview" class="img-thumbnail" style="max-width: 100%;">
+            </div>
+            {% for error in form.image.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <!-- Category Selection Field -->
+        <div class="form-group">
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-control") }}
+            {% for error in form.category.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <!-- Featured Checkbox -->
+        <div class="form-group form-check">
+            {{ form.is_featured(class="form-check-input") }}
+            {{ form.is_featured.label(class="form-check-label") }}
+            {% for error in form.is_featured.errors %}
+            <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.querySelector('#form_image').addEventListener('change', function(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('image-preview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    });
+</script>
+
+{% endblock %}

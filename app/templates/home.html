@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<style>
+    /* Restrict image size */
+    .img-size {
+        height: 400px; /* Adjust the height as needed */
+        object-fit: cover; /* Ensures image covers the container without stretching */
+    }
+
+    /* Set post title color to black */
+    .post-title {
+        color: black;
+        font-size: 2.5rem;
+        margin-top: auto;
+    }
+    .post-title a {
+        color: black;
+        text-decoration: none;
+    }
+
+    .post-title-content {
+        color: black;
+    }
+    /* Style for carousel caption */
+    .carousel-caption {
+        position: static;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Optional: adds background for better readability */
+        color: white;
+        padding: 10px;
+    }
+    .card-title {
+        /* font-size: 1.5rem; */
+        color: black;
+        /* font-size: 1.5rem; */
+    }
+
+    .card-title a {
+        color: black;
+        text-decoration: none;
+    }
+    .card-body {
+        /* padding: 5px; */
+        border-color: gray;
+    }
+    .section-header {
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 1px solid #e9ecef;
+        box-shadow: 0cap 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* ticker styles */
+    /* News Ticker Styles */
+    .news-ticker {
+        width: 100%;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        position: relative;
+        height: 40px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .headline {
+        font-weight: bold;
+        color: #333;
+        padding: 0 15px;
+        white-space: nowrap;
+    }
+
+    .ticker-container {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .ticker-content {
+        display: inline-block;
+        animation: ticker 30s linear infinite;
+    }
+
+    .news-item {
+        display: inline-block;
+        font-size: 16px;
+        color: #333;
+        padding: 0 10px;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .news-item a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .news-item a:hover {
+        color: #007bff;
+    }
+
+    @keyframes ticker {
+        0% {
+            transform: translateX(100%);
+        }
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+    /* .headline {
+        font-weight: bold;
+        background-color: #007bff;
+        color: white;
+        padding: 0 15px;
+        white-space: nowrap;
+    } */
+
+    .headline {
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    padding: 0 15px;
+    white-space: nowrap;
+    position: relative; /* Ensure the pseudo-element positions relative to this */
+    display: inline-block;
+    height: 40px; /* Adjust height to match the ticker */
+    line-height: 40px; /* Center text vertically */
+    margin-right: 10px; /* Add space between the headline and ticker */
+    }
+
+    .headline::after {
+        content: '';
+        position: absolute;
+        right: -20px; /* Adjust based on your arrow size */
+        top: 0;
+        border-top: 20px solid transparent; /* Half the height of the headline */
+        border-bottom: 20px solid transparent; /* Half the height of the headline */
+        border-left: 20px solid #007bff; /* Match the background color */
+    }
+
+    .adsense-space {
+    width: 1100px;
+    height: 200px;
+    margin: 20px auto; /* Center the ad horizontally */
+    border: 1px dashed #ccc; /* Optional: dashed border to visualize the ad space */
+    background-color: #f9f9f9; /* Optional: light background color for contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    }
+
+    .adsense-content {
+        text-align: center;
+        color: #666; /* Optional: text color for the placeholder message */
+        font-size: 16px;
+    }
+
+</style>
+
+<!-- News Ticker -->
+        <div class="news-ticker">
+            <div class="headline">Latest News:</div>
+            <div class="ticker-container">
+                <div class="ticker-content">
+                    {% for post in latest_posts %}
+                    <span class="news-item">
+                        <a href="{{ url_for('main.post', post_id=post.id) }}">{{ post.title }}</a>
+                        &nbsp;|&nbsp;
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- AdSense Space -->
+        <div class="adsense-space">
+            <!-- You can place your AdSense code here -->
+            <div class="adsense-content">
+                <!-- This is a placeholder for your AdSense ad -->
+                <p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1957707501303524"
+                    crossorigin="anonymous"></script>
+               <!-- leaderboard -->
+               <ins class="adsbygoogle"
+                    style="display:inline-block;width:970px;height:90px"
+                    data-ad-client="ca-pub-1957707501303524"
+                    data-ad-slot="7555755535"></ins>
+               <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+               </script></p>
+            </div>
+        </div>
+
+<div class="row">
+    <!-- Featured Section -->
+<div class="col-lg-8">
+    <h2 class="my-4">Featured Articles</h2>
+    <div id="carouselExampleIndicators" class="carousel slide mb-4" data-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for i in range(featured_posts|length) %}
+            <li data-target="#carouselExampleIndicators" data-slide-to="{{ i }}" {% if i == 0 %}class="active"{% endif %}></li>
+            {% endfor %}
+        </ol>
+        <div class="carousel-inner">
+            {% for post in featured_posts %}
+            <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+                <img src="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg')) }}" class="d-block w-100 img-size" alt="{{ post.title }}">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5 class="post-title"><a href="{{ url_for('main.post', post_id=post.id) }}">{{ post.title }}</a></h5>
+                    <!-- <p>{{ post.content[:100] }}...</p> -->
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+     <!-- News Section -->
+        <div class="section-header">
+            <h2 class="section-title">News</h2>
+        </div>
+        {% if news_posts.items %}
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    {% for post in news_posts.items[:5] %}  <!-- Limit to 5 articles -->
+                        {% if loop.index == 1 %}
+                        <!-- Show thumbnail image and content only for the first article -->
+                    <div class="col-md-4">
+                        <img src="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg')) }}" class="card-img" alt="{{ post.title }}" style="object-fit: cover; width: 100%; height: 100%;">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ url_for('main.post', post_id=post.id) }}" style="text-decoration: none; color: black;">{{ post.title }}</a>
+                            </h5>
+                            <p class="card-text text-truncate" style="overflow-wrap: break-word; word-wrap: break-word; white-space: normal;">
+                                {{ post.content[:150] }}...
+                            </p>
+                            <a href="{{ url_for('main.post', post_id=post.id) }}" class="card-link">Read More</a>
+                        </div>
+                    </div>
+                        {% else %}
+                        <!-- For articles without image, display titles in two columns -->
+                        <div class="col-md-6">  
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ url_for('main.post', post_id=post.id) }}">{{ post.title }}</a>
+                                </h5>
+                            </div>
+                        </div>
+                        {% if loop.index % 2 == 0 and not loop.last %}
+                        </div><div class="row no-gutters"> <!-- Close and open a new row every 2 articles -->
+                        {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p>No news posts available.</p>
+        {% endif %}
+
+        <!-- Pagination for News -->
+        {% if news_posts.pages > 1 %}
+        <div class="pagination justify-content-center">
+            {% if news_posts.has_prev %}
+            <a class="page-link" href="{{ url_for('main.home', news_page=news_posts.prev_num) }}">&laquo;</a>
+            {% endif %}
+            {% for page_num in news_posts.iter_pages() %}
+            {% if page_num %}
+            {% if page_num == news_posts.page %}
+            <span class="page-link active">{{ page_num }}</span>
+            {% else %}
+            <a class="page-link" href="{{ url_for('main.home', news_page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if news_posts.has_next %}
+            <a class="page-link" href="{{ url_for('main.home', news_page=news_posts.next_num) }}">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="ad-code">
+            <iframe src="{{ url_for('main.ad_view', ad_id=active_ad.id) }}" style="display:none;"></iframe>
+            {{ active_ad.ad_code|safe }}
+        </div>
+
+        
+
+        <!-- Opinions Section -->
+        <div class="section-header">
+            <h2 class="section-title">Opinions</h2>
+        </div>
+        {% if opinion_posts.items %}
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    {% for post in opinion_posts.items[:5] %}  <!-- Limit to 5 articles -->
+                        {% if loop.index == 1 %}
+                        <!-- Show thumbnail image and content only for the first article -->
+                        <div class="col-md-4">
+                            <img src="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg')) }}" class="card-img" alt="{{ post.title }}">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ url_for('main.post', post_id=post.id) }}">{{ post.title }}</a>
+                                </h5>
+                                <p class="card-text">{{ post.content[:150] }}...</p>
+                                <a href="{{ url_for('main.post', post_id=post.id) }}" class="card-link">Read More</a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <!-- For articles without image, display titles in two columns -->
+                        <div class="col-md-6">  <!-- Adjust to col-md-6 for two columns -->
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ url_for('main.post', post_id=post.id) }}">{{ post.title }}</a>
+                                </h5>
+                            </div>
+                        </div>
+                        {% if loop.index % 2 == 0 and not loop.last %}
+                        </div><div class="row no-gutters"> <!-- Close and open a new row every 2 articles -->
+                        {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <p>No opinion posts available.</p>
+        {% endif %}
+
+        <!-- Pagination for Opinions -->
+        {% if opinion_posts.pages > 1 %}
+        <div class="pagination justify-content-center">
+            {% if opinion_posts.has_prev %}
+            <a class="page-link" href="{{ url_for('main.home', opinions_page=opinion_posts.prev_num) }}">&laquo;</a>
+            {% endif %}
+            {% for page_num in opinion_posts.iter_pages() %}
+            {% if page_num %}
+            {% if page_num == opinion_posts.page %}
+            <span class="page-link active">{{ page_num }}</span>
+            {% else %}
+            <a class="page-link" href="{{ url_for('main.home', opinions_page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            {% if opinion_posts.has_next %}
+            <a class="page-link" href="{{ url_for('main.home', opinions_page=opinion_posts.next_num) }}">&raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+
+
+
+    </div>
+
+    <!-- Widgets Section -->
+    <div class="col-lg-4">
+        <!-- Latest Articles Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Latest Articles</h5>
+            <div class="card-body">
+                {% if latest_posts %}
+                    {% for post in latest_posts %}
+                    <div class="media mb-3">
+                        <img src="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg')) }}" class="mr-3" alt="{{ post.title }}" width="64">
+                        <div class="media-body">
+                            <h6 class="mt-0">{{ post.title }}</h6>
+                            <a href="{{ url_for('main.post', post_id=post.id) }}" class="stretched-link">Read More</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No latest articles available.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Advertisement Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Advertisement</h5>
+            <div class="card-body">
+                {% if active_ad %}
+                    {% if active_ad.ad_code %}
+                        <!-- Render ad code and track view -->
+                        <div class="ad-code">
+                            <iframe src="{{ url_for('main.ad_view', ad_id=active_ad.id) }}" style="display:none;"></iframe>
+                            {{ active_ad.ad_code|safe }}
+                        </div>
+                    {% elif active_ad.image_file %}
+                        <!-- Track view and wrap image with click tracker -->
+                        <iframe src="{{ url_for('main.ad_view', ad_id=active_ad.id) }}" style="display:none;"></iframe>
+                        <a href="{{ url_for('main.ad_click', ad_id=active_ad.id) }}" target="_blank">
+                            <img src="{{ url_for('static', filename='ads/' + active_ad.image_file) }}" class="img-fluid" alt="Advertisement">
+                        </a>
+                    {% else %}
+                        <!-- Fallback placeholder if no ad code or image -->
+                        <img src="{{ url_for('static', filename='ads/ad_placeholder.jpg') }}" class="img-fluid" alt="Advertisement">
+                    {% endif %}
+                {% else %}
+                    <!-- Fallback placeholder if no active ad -->
+                    <img src="{{ url_for('static', filename='ads/ad_placeholder.jpg') }}" class="img-fluid" alt="Advertisement">
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Widgets Section -->
+    
+        <!-- Latest Articles Widget -->
+        <div class="card my-4">
+            <h5 class="card-header">Latest Articles</h5>
+            <div class="card-body">
+                {% if opinion_posts.items %}
+                    {% for post in opinion_posts.items[:4] %}
+
+                    <div class="media mb-3">
+                        <img src="{{ url_for('static', filename='featured_images/' + (post.image_file if post.image_file else 'default.jpg')) }}" class="mr-3" alt="{{ post.title }}" width="64">
+                        <div class="media-body">
+                            <h6 class="mt-0">{{ post.title }}</h6>
+                            <a href="{{ url_for('main.post', post_id=post.id) }}" class="stretched-link">Read More</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No latest articles available.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Optional JavaScript for dynamic control -->
+<!-- Optional JavaScript for dynamic control -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ticker = document.querySelector('.ticker-container');
+        const speedFactor = 50; // Adjust the speed factor if needed
+        ticker.style.animationDuration = (speedFactor * ticker.querySelectorAll('.news-item').length) + 's';
+    });
+</script>
+
+{% endblock %}

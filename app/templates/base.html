@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flask Blog{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    {% block meta %}
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ post.title if post else 'Flask Blog' }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ url_for('static', filename='featured_images/' + (post.image_file if post and post.image_file else 'default.jpg'), _external=True) }}">
+    <meta property="og:description" content="{{ post.content[:200] if post else 'Welcome to Flask Blog' }}">
+    <meta property="og:site_name" content="Flask Blog">
+    {% endblock %}
+</head>
+<body>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        {% include 'navigation.html' %}
+        
+
+
+        <div class="flex-fill container mt-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- <footer class="bg-dark text-white text-center py-3 mt-auto">
+            <div class="container">
+                <p>&copy; 2024 Ese Amadasun</p>
+            </div>
+        </footer> -->
+
+        <!-- Footer -->
+    <footer class="bg-dark text-white mt-4">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="#"Career</a></li>
+                        <li><a href="#"Our Product</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3>Our Services</h3>
+                    <ul>
+                        <li><a href="#">Online Therapy</a></li>
+                        <li><a href="#">In-Person Therapy</a></li>
+                        <li><a href="#">Wellness Program</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3>Newsletter</h3>
+                    <p>You can trust us to fast-track your healing process.</p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Your email address">
+                        <div class="input-group-append">
+                            <button class="btn btn-warning" type="button">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Copyright Section -->
+    <div class="copyright">
+        &copy; {{ current_year }} Blog. All rights reserved.
+    </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    
+
+
+
+
+</body>
+</html>

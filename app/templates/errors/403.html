@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Access Forbidden{% endblock %}
+{% block content %}
+<div class="text-center mt-5">
+    <h1 class="display-4">403</h1>
+    <p class="lead">Access Forbidden</p>
+    <p>You do not have permission to access this page.</p>
+    <a class="btn btn-primary" href="{{ url_for('main.home') }}">Back to Home</a>
+</div>
+{% endblock %}
