@@ -142,22 +142,55 @@
         border-left: 20px solid #007bff; /* Match the background color */
     }
 
-    .adsense-space {
+    /* .adsense-space {
     width: 1100px;
     height: 200px;
-    margin: 20px auto; /* Center the ad horizontally */
-    border: 1px dashed #ccc; /* Optional: dashed border to visualize the ad space */
-    background-color: #f9f9f9; /* Optional: light background color for contrast */
+    margin: 20px auto;
+    border: 1px dashed #ccc;
+    background-color: #f9f9f9;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    box-sizing: border-box;
     }
 
     .adsense-content {
         text-align: center;
-        color: #666; /* Optional: text color for the placeholder message */
+        color: #666;
         font-size: 16px;
+    } */
+
+    .adsense-space {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+    }
+
+    .adsense-content {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .adsense-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    @media (max-width: 576px) {
+        .adsense-space {
+            padding: 5px;
+        }
+
+        .adsense-content {
+            height: 150px;
+        }
     }
 
 </style>
@@ -177,23 +210,34 @@
             </div>
         </div>
 
-        <!-- AdSense Space -->
-        <div class="adsense-space">
-            <!-- You can place your AdSense code here -->
+        <!-- AdSense Space Above Featured Image -->
+<div class="adsense-space my-4">
+    {% if homepage_ads and homepage_ads.is_active %}
+        {% if homepage_ads.ad_code %}
+            <!-- Render the ad code -->
             <div class="adsense-content">
-                <!-- This is a placeholder for your AdSense ad -->
-                <p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1957707501303524"
-                    crossorigin="anonymous"></script>
-               <!-- leaderboard -->
-               <ins class="adsbygoogle"
-                    style="display:inline-block;width:970px;height:90px"
-                    data-ad-client="ca-pub-1957707501303524"
-                    data-ad-slot="7555755535"></ins>
-               <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-               </script></p>
+                {{ homepage_ads.ad_code|safe }}
             </div>
-        </div>
+        {% elif homepage_ads.image_file %}
+            <!-- Render the ad image with an optional link -->
+            <!-- <a href="url_for{{ homepage_ads.embed_link or '#' }}" target="_blank"> -->
+            <!-- Track view and wrap image with click tracker -->
+            <iframe src="{{ url_for('main.homepage_ads_view', ad_id=active_ad.id) }}" style="display:none;"></iframe>
+            <a href="{{ url_for('main.homepage_ads_click', ad_id=active_ad.id) }}" target="_blank">
+                <img src="{{ url_for('static', filename='ads/' + homepage_ads.image_file) }}" alt="Advertisement" class="img-fluid">
+            </a>
+        {% else %}
+            <!-- Fallback placeholder if no ad code or image -->
+            <p>No advertisement available.</p>
+        {% endif %}
+    {% else %}
+        <!-- Fallback placeholder if no ad is found in the database -->
+        <p>No advertisement available.</p>
+    {% endif %}
+</div>
+
+
+
 
 <div class="row">
     <!-- Featured Section -->

@@ -76,6 +76,7 @@ class Advertisement(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     clicks = db.Column(db.Integer, default=0)
+    location = db.Column(db.String(100), nullable=True)
 
     # Increment view count
     def increment_view(self):
@@ -89,3 +90,15 @@ class Advertisement(db.Model):
 
     def __repr__(self):
         return f"Advertisement('{self.id}', '{self.image_file}', '{self.is_active}')"
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    approved = db.Column(db.Boolean, default=False)  # Moderation status
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Comment('{self.content}', '{self.date_posted}')"

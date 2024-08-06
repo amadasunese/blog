@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Moderate Comments</h2>
+    <ul class="list-group">
+        {% for comment in comments %}
+        <li class="list-group-item">
+            {{ comment.content }}
+            <small class="text-muted">by {{ comment.author_id.username }} on {{ comment.date_posted.strftime('%Y-%m-%d %H:%M') }}</small>
+            <a href="{{ url_for('main.approve_comment', comment_id=comment.id) }}" class="btn btn-success btn-sm ml-2">Approve</a>
+            <a href="{{ url_for('main.delete_comment', comment_id=comment.id) }}" class="btn btn-danger btn-sm ml-2">Delete</a>
+        </li>
+        {% else %}
+        <p>No comments to moderate.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

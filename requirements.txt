@@ -1,0 +1,4 @@
+python-decouple
+flask_mail
+flask_migrate
+email_validator

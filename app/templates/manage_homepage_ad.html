@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Manage Homepage Ad{% endblock %}
+{% block content %}
+<h2 class="my-4">Manage Homepage Advertisement</h2>
+<form method="POST" action="" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <!-- Ad Code Field -->
+    <div class="form-group">
+        {{ form.ad_code.label(class="form-label") }}
+        {{ form.ad_code(class="form-control") }}
+        {% for error in form.ad_code.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <!-- Image Upload Field -->
+    <div class="form-group">
+        {{ form.image.label(class="form-label") }}
+        {{ form.image(class="form-control-file") }}
+        {% for error in form.image.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <!-- Embed Link Field -->
+    <div class="form-group">
+        {{ form.embed_link.label(class="form-label") }}
+        {{ form.embed_link(class="form-control") }}
+        {% for error in form.embed_link.errors %}
+        <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+    </div>
+
+    <!-- Active Checkbox -->
+    <div class="form-group form-check">
+        {{ form.is_active(class="form-check-input") }}
+        {{ form.is_active.label(class="form-check-label") }}
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+</form>
+
+<!-- Display Current Homepage Ad -->
+<h3 class="my-4">Current Homepage Ad</h3>
+{% if homepage_ads %}
+<div class="card mb-3">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='ads/' + (homepage_ads.image_file if homepage_ads.image_file else 'ad_placeholder.jpg')) }}" class="card-img" alt="Ad Image">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Ad ID: {{ homepage_ads.id }}</h5>
+                <p class="card-text">Code: {{ homepage_ads.ad_code }}</p>
+                <p class="card-text">Active: {{ 'Yes' if homepage_ads.is_active else 'No' }}</p>
+                <p class="card-text">Embed Link: <a href="{{ homepage_ads.embed_link }}" target="_blank">{{ homepage_ads.embed_link }}</a></p>
+                <p class="card-text">Views: {{ homepage_ads.views }}</p>
+                <p class="card-text">Clicks: {{ homepage_ads.clicks }}</p>
+
+                <!-- Update Button -->
+                <form method="POST" action="{{ url_for('main.manage_homepage_ad') }}" style="display: inline;">
+                    <input type="hidden" name="ad_id" value="{{ homepage_ads.id }}">
+                    <button type="submit" class="btn btn-info">Update</button>
+                </form>
+                <!-- Delete Button -->
+                <form method="POST" action="{{ url_for('main.delete_advertisement', ad_id=homepage_ads.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<p>No ad available for the homepage.</p>
+{% endif %}
+{% endblock %}
