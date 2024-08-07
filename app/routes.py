@@ -48,6 +48,7 @@ def contact():
         try:
             mail.send(msg)
             flash('Your message has been sent successfully!', 'success')
+            return redirect(url_for('main.home'))
         except Exception as e:
             flash(f"An error occurred while sending your message: {str(e)}", 'danger')
 
@@ -371,6 +372,15 @@ def category_posts(category_id):
     posts = Post.query.filter_by(category_id=category.id).paginate(per_page=5)
     return render_template('category_posts.html', category=category, posts=posts)
 
+
+@main.route('/categories/delete/<int:category_id>', methods=['POST'])
+@admin_required
+def delete_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    db.session.delete(category)
+    db.session.commit()
+    flash('Category deleted successfully!', 'success')
+    return redirect(url_for('main.categories'))
 
 @main.route('/about')
 def about():
