@@ -30,6 +30,15 @@ class Config:
     MAIL_USERNAME = 'amadasunese@gmail.com'
     MAIL_PASSWORD = 'qxxo axga dzia jjsw'
     MAIL_DEFAULT_SENDER = 'amadasunese@gmail.com'
+    MAIL_DEFAULT_RECIPIENT = 'amadasunese@gmail.com'
+
+
+    # EMAIL_HOST = 'smtp.gmail.com'
+    # EMAIL_PORT = 465
+    # EMAIL_USE_SSL = True
+    # EMAIL_HOST_USER = 'amadasunese@gmail.com'
+    # EMAIL_HOST_PASSWORD = 'qxxo axga dzia jjsw'
+    # RECIPIENT_ADDRESS = 'amadasunese@gmail.com'
 
 
 mail = Mail()

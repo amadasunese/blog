@@ -129,21 +129,9 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField('Reset Password')
 
 
-
 class ContactForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=50)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    message = TextAreaField('Message', validators=[DataRequired()])
-
-
-class ResetPasswordRequestForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Request Password Reset')
-
-
-class ResetPasswordForm(FlaskForm):
-    password = PasswordField('New Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm New Password',
-                                     validators=[DataRequired(),
-                                                 EqualTo('password')])
-    submit = SubmitField('Reset Password')
+    subject = StringField('Subject', validators=[DataRequired(), Length(min=2, max=100)])
+    message = TextAreaField('Message', validators=[DataRequired(), Length(min=10, max=500)])
+    submit = SubmitField('Send')

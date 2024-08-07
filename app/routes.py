@@ -17,17 +17,43 @@ from app.utils.decorators import admin_required
 from flask_mail import Message, Mail
 import smtplib
 from itsdangerous import URLSafeTimedSerializer
+from config import Config
 
 # from utils.email import send_email, mail
 
 
-from app.forms import RequestResetForm, ResetPasswordForm
+from app.forms import RequestResetForm, ResetPasswordForm, ContactForm, CommentForm
 from app.utils.email import send_reset_email
+from app import mail
 
 
 
 
 main = Blueprint('main', __name__)
+
+
+@main.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+    if form.validate_on_submit():
+        # Prepare the email message
+        msg = Message(
+            subject=f"New Contact Form Submission: {form.subject.data}",
+            sender=form.email.data,
+            recipients=[current_app.config['MAIL_DEFAULT_RECIPIENT']]
+        )
+        msg.body = f"Message from {form.name.data} ({form.email.data}):\n\n{form.message.data}"
+
+        # Send the email
+        try:
+            mail.send(msg)
+            flash('Your message has been sent successfully!', 'success')
+        except Exception as e:
+            flash(f"An error occurred while sending your message: {str(e)}", 'danger')
+
+        return redirect(url_for('main.contact'))
+
+    return render_template('contact.html', form=form)
 
 
 @main.route('/')
@@ -350,9 +376,9 @@ def category_posts(category_id):
 def about():
     return render_template('about.html', title='About')
 
-@main.route('/contact')
-def contact():
-    return render_template('contact.html', title='Contact')
+# @main.route('/contact')
+# def contact():
+#     return render_template('contact.html', title='Contact')
 
 @main.route('/account', methods=['GET', 'POST'])
 @login_required

@@ -6,6 +6,7 @@
 from flask import url_for
 from flask_mail import Message
 from app import mail
+from flask import current_app
 
 def send_reset_email(user):
     token = user.get_reset_token()
@@ -26,7 +27,7 @@ def send_email(to, subject, template):
         subject,
         recipients=[to],
         html=template,
-        sender=app.config["MAIL_DEFAULT_SENDER"],
+        sender=current_app.config["MAIL_DEFAULT_SENDER"],
     )
     mail.send(msg)
 
@@ -35,7 +36,7 @@ def send_feedback(to, subject, template):
         subject,
         recipients=[to],
         html=template,
-        sender=app.config["MAIL_DEFAULT_SENDER"],
+        sender=current_app.config["MAIL_DEFAULT_SENDER"],
     )
     mail.send(msg)
 
