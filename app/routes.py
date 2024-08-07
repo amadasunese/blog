@@ -9,9 +9,9 @@ import os
 from app.forms import CommentForm
 from flask import current_app
 import imghdr
-from app.utils import convert_to_paragraphs
+from app.utils.convert import convert_to_paragraphs
 from PIL import Image
-
+from app.utils.decorators import admin_required
 
 main = Blueprint('main', __name__)
 
@@ -51,6 +51,14 @@ def home():
 
 
 
+@main.route('/admin/dashboard')
+@login_required
+def admin_dashboard():
+    if not current_user.is_admin:
+        abort(403)
+    return render_template('admin/dashboard.html')
+
+
 @main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -88,7 +96,8 @@ def logout():
 
 
 @main.route('/post/new', methods=['GET', 'POST'])
-@login_required
+# @login_required
+@admin_required
 def new_post():
     form = PostForm()
 
@@ -138,7 +147,7 @@ def new_post():
     )
 
 @main.route('/post/<int:post_id>', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def post(post_id):
     post = Post.query.get_or_404(post_id)
 
@@ -175,7 +184,8 @@ def post(post_id):
     #                        post=post)
 
 @main.route("/moderate_comments")
-@login_required
+# @login_required
+@admin_required
 def moderate_comments():
     # if not current_user.is_admin:
     #     abort(403)  # For simplicity, assuming an is_admin property for user
@@ -184,7 +194,8 @@ def moderate_comments():
     return render_template('moderate_comments.html', comments=comments)
 
 @main.route("/approve_comment/<int:comment_id>")
-@login_required
+# @login_required
+@admin_required
 def approve_comment(comment_id):
     # if not current_user.is_admin:
     #     abort(403)
@@ -196,7 +207,8 @@ def approve_comment(comment_id):
     return redirect(url_for('main.moderate_comments'))
 
 @main.route("/delete_comment/<int:comment_id>")
-@login_required
+# @login_required
+@admin_required
 def delete_comment(comment_id):
     # if not current_user.is_admin:
     #     abort(403)
@@ -210,7 +222,8 @@ def delete_comment(comment_id):
 
 
 @main.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
-@login_required
+# @login_required
+@admin_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
@@ -242,7 +255,8 @@ def update_post(post_id):
                            categories=form.category.choices)
 
 @main.route('/post/<int:post_id>/delete', methods=['POST'])
-@login_required
+# @login_required
+@admin_required
 def delete_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
@@ -261,6 +275,7 @@ def user_posts(username):
 
 
 @main.route('/categories', methods=['GET', 'POST'])
+@admin_required
 def categories():
     categories = Category.query.all()
     form = CategoryForm()
@@ -307,7 +322,8 @@ def account():
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
 @main.route('/manage_ads', methods=['GET', 'POST'])
-@login_required
+# @login_required
+@admin_required
 def manage_ads():
     # Query all ads to display them
     ads = Advertisement.query.all()
@@ -361,7 +377,8 @@ def manage_ads():
     return render_template('manage_ads.html', form=form, ads=ads)
 
 @main.route('/advertisement/delete/<int:ad_id>', methods=['POST'])
-@login_required
+# @login_required
+@admin_required
 def delete_advertisement(ad_id):
     ad = Advertisement.query.get_or_404(ad_id)
     try:
@@ -416,7 +433,8 @@ def homepage_ads_click(ad_id):
 
 
 @main.route('/manage_homepage_ad', methods=['GET', 'POST'])
-@login_required
+# @login_required
+@admin_required
 def manage_homepage_ad():
     # Query the current homepage ad
     homepage_ads = Advertisement.query.filter_by(location='homepage').first()

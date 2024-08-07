@@ -1,23 +1,3 @@
-# from flask import Flask
-# from app.extensions import db, migrate, bcrypt, csrf
-# from config import Config
-
-
-# def create_app():
-#     app = Flask(__name__)
-#     app.config.from_object('app.config.Config')
-
-#     db.init_app(app)
-#     migrate.init_app(app, db)
-#     bcrypt.init_app(app)
-#     csrf.init_app(app)
-
-#     from app.routes import main
-#     app.register_blueprint(main)
-
-#     return app
-
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 # from flask_bcrypt import Bcrypt
@@ -27,7 +7,7 @@ from app.extensions import db, migrate, bcrypt, csrf
 from app.models import User
 
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = 'main.login'
 login_manager.login_message_category = 'info'
 
 def create_app(config_class=Config):

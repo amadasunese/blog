@@ -5,12 +5,26 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
-        {% if current_user.is_authenticated %}
-            {% if current_user.is_admin %}
+            {% if current_user.is_authenticated and is_admin %}
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('main.admin_dashboard') }}">Admin Dashboard</a>
+                <a class="nav-link" href="{{ url_for('main.new_post') }}">Create Post</a>
             </li>
-            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.moderate_comments') }}">Moderate Comments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.manage_ads') }}">Insert Ads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.manage_homepage_ad') }}">Insert Homepage Ads</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main.ads') }}">View Ads</a>
+            </li>
+            
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('main.categories') }}">Manage Categories</a>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('main.account') }}">Account</a>

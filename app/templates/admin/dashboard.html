@@ -1,0 +1,19 @@
+<!-- templates/admin/dashboard.html -->
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <div class="list-group">
+        <a href="{{ url_for('main.new_post') }}" class="list-group-item list-group-item-action">Create Post</a>
+        <a href="{{ url_for('main.moderate_comments') }}" class="list-group-item list-group-item-action">Moderate Comments</a>
+        <a href="{{ url_for('main.manage_ads') }}" class="list-group-item list-group-item-action">Insert Ads</a>
+        <a href="{{ url_for('main.manage_homepage_ad') }}" class="list-group-item list-group-item-action">Insert Homepage Ads</a>
+        <a href="{{ url_for('main.ads') }}" class="list-group-item list-group-item-action">View Ads</a>
+        <a href="{{ url_for('main.categories') }}" class="list-group-item list-group-item-action">Manage Categories</a>
+    </div>
+</div>
+{% endblock %}
