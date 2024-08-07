@@ -1,6 +1,11 @@
 from datetime import datetime
 from app.extensions import db
 from flask_login import UserMixin
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+# from itsdangerous import URLSafeTimedSerializer as Serializer
+from itsdangerous import URLSafeTimedSerializer as Serializer
+from flask import current_app
 
 
 
@@ -12,6 +17,23 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
+    def get_reset_token(self, expires_sec=1800):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id}, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+
+    @staticmethod
+    def verify_reset_token(token, expires_sec=1800):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(
+                token,
+                salt=current_app.config['SECURITY_PASSWORD_SALT'],
+                max_age=expires_sec
+            )['user_id']
+        except Exception:
+            return None
+        return User.query.get(user_id)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"

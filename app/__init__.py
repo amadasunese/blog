@@ -5,10 +5,12 @@ from flask_login import LoginManager
 from config import Config
 from app.extensions import db, migrate, bcrypt, csrf
 from app.models import User
+from flask_mail import Mail
 
 login_manager = LoginManager()
 login_manager.login_view = 'main.login'
 login_manager.login_message_category = 'info'
+mail = Mail()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -18,6 +20,8 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
+
 
     @login_manager.user_loader
     def load_user(user_id):
